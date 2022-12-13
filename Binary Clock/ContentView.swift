@@ -43,22 +43,66 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(.ultraThinMaterial)
-            Text("Hello, world!")
-                .onTapGesture {
-                    for window in NSApplication.shared.windows {
-                        window.backgroundColor = .clear
-                        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-                        window.standardWindowButton(.closeButton)?.isHidden = true
-                        window.standardWindowButton(.zoomButton)?.isHidden = true
-                        
-                        if let screen = NSScreen.main {
-                            window.setFrame(NSRect(x: Int(screen.frame.width)-windowWidth-windowPadding, y: 0+windowPadding, width: windowWidth, height: windowHeight), display: false, animate: true)
-                        }
-                    }
+                .background(VisualEffectView())
+                .foregroundColor(colors[currentColor].opacity(0.25))
+            HStack {
+                VStack {
+                    Spacer()
+                    Text("8")
+                    Spacer()
+                    Text("4")
+                    Spacer()
+                    Text("2")
+                    Spacer()
+                    Text("1")
+                    Spacer()
                 }
+                .fontDesign(.monospaced)
+                .fontWeight(.semibold)
+                .foregroundColor(colors[currentColor])
+                .opacity(0.5)
+                HStack {
+                    digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentHourDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                    
+                    digitCircles(currentMinuteDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentMinuteDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                    
+                    digitCircles(currentSecondDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentSecondDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                }
+            }
         }
         .ignoresSafeArea()
+        .animation(.easeOut(duration: 0.25), value: [currentSecondDigit1, currentSecondDigit2,
+                                                    currentMinuteDigit1, currentMinuteDigit2,
+                                                    currentHourDigit1, currentHourDigit2,
+                                                    currentColor])
+        .onReceive(refreshTime) { time in
+            let currentTime = Date()
+            
+            let timeFormatterSecond = DateFormatter()
+            timeFormatterSecond.dateFormat = "ss"
+            currentSecondDigit1 = Int(timeFormatterSecond.string(from: currentTime)[0]) ?? 0
+            currentSecondDigit2 = Int(timeFormatterSecond.string(from: currentTime)[1]) ?? 0
+            
+            let timeFormatterMinute = DateFormatter()
+            timeFormatterMinute.dateFormat = "mm"
+            currentMinuteDigit1 = Int(timeFormatterMinute.string(from: currentTime)[0]) ?? 0
+            currentMinuteDigit2 = Int(timeFormatterMinute.string(from: currentTime)[1]) ?? 0
+            
+            let timeFormatterHour = DateFormatter()
+            timeFormatterHour.dateFormat = "hh"
+            currentHourDigit1 = Int(timeFormatterHour.string(from: currentTime)[0]) ?? 0
+            currentHourDigit2 = Int(timeFormatterHour.string(from: currentTime)[1]) ?? 0
+            
+            // CHANGE COLOR
+            if currentColor >= colors.count-1 {
+                currentColor = 0
+            } else {
+                currentColor += 1
+            }
+        }
     }
 }
 
@@ -99,6 +143,21 @@ struct digitCircles: View {
                 .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 3) ? onColor : offColor))
                 .padding([.top], 1.25)
         }
+    }
+}
+
+// A view for a very translucent material
+struct VisualEffectView: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSVisualEffectView {
+        let effectView = NSVisualEffectView()
+        effectView.state = .active
+        effectView.material = .hudWindow
+        effectView.isEmphasized = true
+        effectView.blendingMode = .behindWindow
+        return effectView
+    }
+
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
     }
 }
 
@@ -143,12 +202,5 @@ extension Color {
             blue:  Double(b) / 255,
             opacity: Double(a) / 255
         )
-    }
-}
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
