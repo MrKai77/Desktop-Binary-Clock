@@ -43,8 +43,10 @@ struct ContentView: View {
         ZStack {
             Rectangle()
                 .background(VisualEffectView())
-                .foregroundColor(currentModeMonochrome ? Color(.black).opacity(0.6) : Color(.black).opacity(0.8))
+                .foregroundColor(currentModeMonochrome ? Color("Background").opacity(0.6) : Color("Background").opacity(0.8))
             HStack {    // MAIN BINARY CLOCK VIEW
+                Spacer()
+                
                 VStack {
                         Spacer()
                         Text("8")
@@ -56,9 +58,10 @@ struct ContentView: View {
                         Text("1")
                         Spacer()
                 }
-                .fontDesign(.monospaced)
-                .fontWeight(.semibold)
-                .foregroundColor(colors[currentColor].opacity(0.5))
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundColor(colors[currentColor].opacity(0.75))
+                
+                Spacer()
                 
                 HStack {
                     digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
@@ -70,6 +73,8 @@ struct ContentView: View {
                     digitCircles(currentSecondDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
                     digitCircles(currentSecondDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
                 }
+                
+                Spacer()
             }
         }
         .ignoresSafeArea()
