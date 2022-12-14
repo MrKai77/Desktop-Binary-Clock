@@ -23,9 +23,9 @@ struct Binary_ClockApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    let windowPadding = 10
-    let windowWidth = 250
-    let windowHeight = 175
+    private let windowPadding = 10
+    private let windowWidth = 250
+    private let windowHeight = 175
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
@@ -39,11 +39,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.closeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
-            
+
             if let screen = NSScreen.main {
                 window.setFrame(NSRect(x: Int(screen.frame.width)-windowWidth-windowPadding, y: 0+windowPadding, width: windowWidth, height: windowHeight), display: false, animate: true)
             }
         }
-        
     }
 }

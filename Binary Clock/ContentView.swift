@@ -9,58 +9,56 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let windowPadding = 10
-    let windowWidth = 250
-    let windowHeight = 175
+    private let refreshTime = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
+    @State private var currentSecondDigit1:Int = 0
+    @State private var currentSecondDigit2:Int = 0
+    @State private var currentMinuteDigit1:Int = 0
+    @State private var currentMinuteDigit2:Int = 0
+    @State private var currentHourDigit1:Int = 0
+    @State private var currentHourDigit2:Int = 0
     
-    let refreshTime = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
-    @State var currentSecondDigit1:Int = 0
-    @State var currentSecondDigit2:Int = 0
-    @State var currentMinuteDigit1:Int = 0
-    @State var currentMinuteDigit2:Int = 0
-    @State var currentHourDigit1:Int = 0
-    @State var currentHourDigit2:Int = 0
-    
-    @State var shouldShowSettings:Bool = false
-    
-    @State var colors = [Color(hex: "#f5e0dc"),
-                         Color(hex: "#f2cdcd"),
-                         Color(hex: "#f5c2e7"),
-                         Color(hex: "#cba6f7"),
-                         Color(hex: "#f38ba8"),
-                         Color(hex: "#eba0ac"),
-                         Color(hex: "#fab387"),
-                         Color(hex: "#f9e2af"),
-                         Color(hex: "#a6e3a1"),
-                         Color(hex: "#94e2d5"),
-                         Color(hex: "#89dceb"),
-                         Color(hex: "#74c7ec"),
-                         Color(hex: "#89b4fa"),
-                         Color(hex: "#b4befe"),
-                         Color(hex: "#cdd6f4")]
-    @State var currentColor:Int = 0
+    @State private var isHovering:Bool = false
+
+    // BTW, colors are from the Catppuccin color palette!
+    @State private var currentModeMonochrome:Bool = true
+    @State private var currentColor:Int = 0
+    @State private var colors = [Color(hex: "#cdd6f4"), // 0. Text
+                                 Color(hex: "#f5e0dc"), // 1. Rosewater
+                                 Color(hex: "#f2cdcd"), // 2. Flamingo
+                                 Color(hex: "#f5c2e7"), // 3. Pink
+                                 Color(hex: "#cba6f7"), // 4. Mauve
+                                 Color(hex: "#f38ba8"), // 5. Red
+                                 Color(hex: "#eba0ac"), // 6. Maroon
+                                 Color(hex: "#fab387"), // 7. Peach
+                                 Color(hex: "#f9e2af"), // 8. Yellow
+                                 Color(hex: "#a6e3a1"), // 9. Green
+                                 Color(hex: "#94e2d5"), // 10. Teal
+                                 Color(hex: "#89dceb"), // 11. Sky
+                                 Color(hex: "#74c7ec"), // 12. Sapphire
+                                 Color(hex: "#89b4fa"), // 13. Blue
+                                 Color(hex: "#b4befe")] // 14. Lavender
     
     var body: some View {
         ZStack {
             Rectangle()
                 .background(VisualEffectView())
-                .foregroundColor(colors[currentColor].opacity(0.25))
-            HStack {
+                .foregroundColor(currentModeMonochrome ? Color(.black).opacity(0.6) : Color(.black).opacity(0.8))
+            HStack {    // MAIN BINARY CLOCK VIEW
                 VStack {
-                    Spacer()
-                    Text("8")
-                    Spacer()
-                    Text("4")
-                    Spacer()
-                    Text("2")
-                    Spacer()
-                    Text("1")
-                    Spacer()
+                        Spacer()
+                        Text("8")
+                        Spacer()
+                        Text("4")
+                        Spacer()
+                        Text("2")
+                        Spacer()
+                        Text("1")
+                        Spacer()
                 }
                 .fontDesign(.monospaced)
                 .fontWeight(.semibold)
-                .foregroundColor(colors[currentColor])
-                .opacity(0.5)
+                .foregroundColor(colors[currentColor].opacity(0.5))
+                
                 HStack {
                     digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
                     digitCircles(currentHourDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
@@ -74,10 +72,11 @@ struct ContentView: View {
             }
         }
         .ignoresSafeArea()
-        .animation(.easeOut(duration: 0.25), value: [currentSecondDigit1, currentSecondDigit2,
+        .animation(.easeOut(duration: 0.2), value: [currentSecondDigit1, currentSecondDigit2,
                                                     currentMinuteDigit1, currentMinuteDigit2,
                                                     currentHourDigit1, currentHourDigit2,
                                                     currentColor])
+        .animation(.easeInOut(duration: 0.2), value: currentModeMonochrome)
         .onReceive(refreshTime) { time in
             let currentTime = Date()
             
@@ -97,10 +96,20 @@ struct ContentView: View {
             currentHourDigit2 = Int(timeFormatterHour.string(from: currentTime)[1]) ?? 0
             
             // CHANGE COLOR
-            if currentColor >= colors.count-1 {
-                currentColor = 0
+            if currentModeMonochrome == false {
+                if currentColor >= colors.count-1 {
+                    currentColor = 0
+                } else {
+                    currentColor += 1
+                }
+            }
+        }
+        .onTapGesture {
+            currentModeMonochrome.toggle()
+            if (currentModeMonochrome) {
+                print("Fixed color mode!")
             } else {
-                currentColor += 1
+                print("Color selection mode! (A.K.A. RAINBOW MODE)")
             }
         }
     }
