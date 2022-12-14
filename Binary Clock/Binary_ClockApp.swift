@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let windowPadding = 10
     private let windowWidth = 250
-    private let windowHeight = 175
+    private let windowHeight = 170
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("Love Catppuccin. \n- Kai")
