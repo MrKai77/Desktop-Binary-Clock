@@ -21,10 +21,9 @@ struct ContentView: View {
 
     // BTW, colors are from the Catppuccin color palette!
     // Why don't I use the official base color instead as black for the background? It looked better.
+    @AppStorage("current_color", store: .standard) private var currentColor:Int = 0
     @State private var colorSelectionMode:Bool = false
-    @State private var currentColor:Int = 0
-    @State private var colors = [Color("Text"),
-                                 Color("Rosewater"),
+    @State private var colors = [Color("Rosewater"),
                                  Color("Flamingo"),
                                  Color("Pink"),
                                  Color("Mauve"),
@@ -58,7 +57,7 @@ struct ContentView: View {
                         Text("1")
                         Spacer()
                 }
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
                 .foregroundColor(colors[currentColor].opacity(0.75))
                 
                 Spacer()
@@ -82,7 +81,7 @@ struct ContentView: View {
                                                     currentMinuteDigit1, currentMinuteDigit2,
                                                     currentHourDigit1, currentHourDigit2,
                                                     currentColor])
-        .animation(.easeInOut(duration: 0.2), value: colorSelectionMode)
+        .animation(.easeOut(duration: 0.2), value: colorSelectionMode)
         .onReceive(refreshTimer) { time in
             let currentTime = Date()
 
@@ -110,11 +109,8 @@ struct ContentView: View {
                 }
             }
         }
-        .contextMenu {
-            Toggle("Color Selection Mode", isOn: $colorSelectionMode)
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
-            }
+        .onTapGesture {
+            colorSelectionMode.toggle()
         }
     }
 }
@@ -135,8 +131,8 @@ struct digitCircles: View {
         self.onColor = on
         self.offColor = off
         
-        strokeOpacity = colorSelectionMode ? 0.25 : 0.2
-        strokeWidth = colorSelectionMode ? 3 : 2.5
+        self.strokeOpacity = colorSelectionMode ? 0.25 : 0.2
+        self.strokeWidth = colorSelectionMode ? 3.5 : 2.5
     }
     
     var body: some View {
