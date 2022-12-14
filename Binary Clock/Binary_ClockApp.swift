@@ -28,8 +28,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let windowHeight = 170
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        print("Love Catppuccin. \n- Kai")
-        
         // SET UP WINDOW
         for window in NSApplication.shared.windows {
             window.backgroundColor = .clear

@@ -22,7 +22,6 @@ struct ContentView: View {
     // BTW, colors are from the Catppuccin color palette!
     // Why don't I use the official base color instead as black for the background? It looked better.
     @State private var colorSelectionMode:Bool = false
-    @State private var systemInsteadOfBase:Bool = true
     @State private var currentColor:Int = 0
     @State private var colors = [Color("Text"),
                                  Color("Rosewater"),
@@ -44,7 +43,7 @@ struct ContentView: View {
         ZStack {
             Rectangle()
                 .background(VisualEffectView())
-                .foregroundColor(systemInsteadOfBase ? (colorSelectionMode ? Color("Background").opacity(1) : Color("Background").opacity(0.75)) : (colorSelectionMode ? Color("Crust").opacity(0.75) : Color("Crust").opacity(1)))
+                .foregroundColor(Color("Background").opacity(0.8))
             HStack {    // MAIN BINARY CLOCK VIEW
                 Spacer()
                 
@@ -65,14 +64,14 @@ struct ContentView: View {
                 Spacer()
                 
                 HStack {
-                    digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
-                    digitCircles(currentHourDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                    digitCircles(currentHourDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                     
-                    digitCircles(currentMinuteDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
-                    digitCircles(currentMinuteDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentMinuteDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                    digitCircles(currentMinuteDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                     
-                    digitCircles(currentSecondDigit1, on: colors[currentColor].opacity(0.75), off: .clear)
-                    digitCircles(currentSecondDigit2, on: colors[currentColor].opacity(0.75), off: .clear)
+                    digitCircles(currentSecondDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                    digitCircles(currentSecondDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                 }
                 
                 Spacer()
@@ -83,7 +82,7 @@ struct ContentView: View {
                                                     currentMinuteDigit1, currentMinuteDigit2,
                                                     currentHourDigit1, currentHourDigit2,
                                                     currentColor])
-        .animation(.easeInOut(duration: 0.2), value: [colorSelectionMode, systemInsteadOfBase])
+        .animation(.easeInOut(duration: 0.2), value: colorSelectionMode)
         .onReceive(refreshTimer) { time in
             let currentTime = Date()
 
@@ -113,7 +112,6 @@ struct ContentView: View {
         }
         .contextMenu {
             Toggle("Color Selection Mode", isOn: $colorSelectionMode)
-            Toggle("System Background", isOn: $systemInsteadOfBase)
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
@@ -123,37 +121,43 @@ struct ContentView: View {
 
 struct digitCircles: View {
     
-    var columnDigit:Int
+    private var columnDigit:Int
     
-    var onColor:Color
-    var offColor:Color
+    private var onColor:Color
+    private var offColor:Color
     
-    init(_ digit:Int, on:Color, off:Color) {
+    private var strokeOpacity:Double = 0.2
+    private var strokeWidth:Double = 2.5
+    
+    init(_ digit:Int, on:Color, off:Color, colorSelectionMode:Bool) {
         self.columnDigit = digit
         
         self.onColor = on
         self.offColor = off
+        
+        strokeOpacity = colorSelectionMode ? 0.25 : 0.2
+        strokeWidth = colorSelectionMode ? 3 : 2.5
     }
     
     var body: some View {
         VStack {
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(0.2), lineWidth: 2.5)
+                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
                 .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 0) ? onColor : offColor))
                 .padding([.bottom], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(0.2), lineWidth: 2.5)
+                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
                 .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 1) ? onColor : offColor))
                 .padding([.bottom, .top], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(0.2), lineWidth: 2.5)
+                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
                 .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 2) ? onColor : offColor))
                 .padding([.bottom, .top], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(0.2), lineWidth: 2.5)
+                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
                 .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 3) ? onColor : offColor))
                 .padding([.top], 1.3)
