@@ -20,23 +20,24 @@ struct ContentView: View {
     @State private var isHovering:Bool = false
 
     // BTW, colors are from the Catppuccin color palette!
+    // Why don't I use the official base color instead as black for the background? It looked better.
     @State private var currentModeMonochrome:Bool = true
     @State private var currentColor:Int = 0
-    @State private var colors = [Color(hex: "#cdd6f4"), // 0. Text
-                                 Color(hex: "#f5e0dc"), // 1. Rosewater
-                                 Color(hex: "#f2cdcd"), // 2. Flamingo
-                                 Color(hex: "#f5c2e7"), // 3. Pink
-                                 Color(hex: "#cba6f7"), // 4. Mauve
-                                 Color(hex: "#f38ba8"), // 5. Red
-                                 Color(hex: "#eba0ac"), // 6. Maroon
-                                 Color(hex: "#fab387"), // 7. Peach
-                                 Color(hex: "#f9e2af"), // 8. Yellow
-                                 Color(hex: "#a6e3a1"), // 9. Green
-                                 Color(hex: "#94e2d5"), // 10. Teal
-                                 Color(hex: "#89dceb"), // 11. Sky
-                                 Color(hex: "#74c7ec"), // 12. Sapphire
-                                 Color(hex: "#89b4fa"), // 13. Blue
-                                 Color(hex: "#b4befe")] // 14. Lavender
+    @State private var colors = [Color("Text"),
+                                 Color("Rosewater"),
+                                 Color("Flamingo"),
+                                 Color("Pink"),
+                                 Color("Mauve"),
+                                 Color("Red"),
+                                 Color("Maroon"),
+                                 Color("Peach"),
+                                 Color("Yellow"),
+                                 Color("Green"),
+                                 Color("Teal"),
+                                 Color("Sky"),
+                                 Color("Sapphire"),
+                                 Color("Blue"),
+                                 Color("Lavender")]
     
     var body: some View {
         ZStack {
