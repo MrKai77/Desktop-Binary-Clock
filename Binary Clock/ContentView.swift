@@ -21,23 +21,24 @@ struct ContentView: View {
     
     @State private var isHovering:Bool = false
 
-    // BTW, colors are from the Catppuccin color palette!
-    // Why don't I use the official base color instead as black for the background? It looked better.
+    // Currently uses Tokyo Night colors!
     @AppStorage("current_color", store: .standard) private var currentColor:Int = 0
     @State private var colorSelectionMode:Bool = false
-    @State private var colors = [ Color(hex: "#f7768e"),
-                                  Color(hex: "#ff9e64"),
-                                  Color(hex: "#e0af68"),
-                                  Color(hex: "#9ece6a"),
-                                  Color(hex: "#73daca"),
-                                  Color(hex: "#b4f9f8"),
-                                  Color(hex: "#2ac3de"),
-                                  Color(hex: "#7dcfff"),
-                                  Color(hex: "#7aa2f7"),
-                                  Color(hex: "#bb9af7"),
-                                  Color(hex: "#c0caf5"),
-                                  Color(hex: "#a9b1d6"),
-                                  Color(hex: "#9aa5ce")]
+    private let colors = [Color("Background 1"),
+                          Color("Background 2"),
+                          Color("Background 3"),
+                          Color("Background 4"),
+                          Color("Background 5"),
+                          Color("Background 6"),
+                          Color("Background 7"),
+                          Color("Background 8"),
+                          Color("Background 9"),
+                          Color("Background 10"),
+                          Color("Background 11"),
+                          Color("Background 12"),
+                          Color("Background 13"),
+                          Color("Background 14"),
+                          Color("Background 15")]
     
     var body: some View {
         ZStack {    // BINARY CLOCK
@@ -59,7 +60,7 @@ struct ContentView: View {
                         Text("1")
                         Spacer()
                 }
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
                 .foregroundColor(colors[currentColor].opacity(0.75))
                 
                 Spacer()
@@ -134,7 +135,7 @@ struct digitCircles: View {
         self.offColor = off
         
         self.strokeOpacity = colorSelectionMode ? 0.25 : 0.2
-        self.strokeWidth = colorSelectionMode ? 4 : 2.5
+        self.strokeWidth = colorSelectionMode ? 4 : 3
     }
     
     var body: some View {
