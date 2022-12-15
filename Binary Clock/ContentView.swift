@@ -24,21 +24,21 @@ struct ContentView: View {
     // Currently uses Tokyo Night colors!
     @AppStorage("current_color", store: .standard) private var currentColor:Int = 0
     @State private var colorSelectionMode:Bool = false
-    private let colors = [Color("Background 1"),
-                          Color("Background 2"),
-                          Color("Background 3"),
-                          Color("Background 4"),
-                          Color("Background 5"),
-                          Color("Background 6"),
-                          Color("Background 7"),
-                          Color("Background 8"),
-                          Color("Background 9"),
-                          Color("Background 10"),
-                          Color("Background 11"),
-                          Color("Background 12"),
-                          Color("Background 13"),
-                          Color("Background 14"),
-                          Color("Background 15")]
+    @State private var colors = [Color("Text"),
+                                 Color("Rosewater"),
+                                 Color("Flamingo"),
+                                 Color("Pink"),
+                                 Color("Mauve"),
+                                 Color("Red"),
+                                 Color("Maroon"),
+                                 Color("Peach"),
+                                 Color("Yellow"),
+                                 Color("Green"),
+                                 Color("Teal"),
+                                 Color("Sky"),
+                                 Color("Sapphire"),
+                                 Color("Blue"),
+                                 Color("Lavender")]
     
     var body: some View {
         ZStack {    // BINARY CLOCK
