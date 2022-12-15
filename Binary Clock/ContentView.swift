@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    
     @State private var refreshTimer = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
     @State private var currentSecondDigit1:Int = 0
     @State private var currentSecondDigit2:Int = 0
@@ -23,26 +25,26 @@ struct ContentView: View {
     // Why don't I use the official base color instead as black for the background? It looked better.
     @AppStorage("current_color", store: .standard) private var currentColor:Int = 0
     @State private var colorSelectionMode:Bool = false
-    @State private var colors = [Color("Rosewater"),
-                                 Color("Flamingo"),
-                                 Color("Pink"),
-                                 Color("Mauve"),
-                                 Color("Red"),
-                                 Color("Maroon"),
-                                 Color("Peach"),
-                                 Color("Yellow"),
-                                 Color("Green"),
-                                 Color("Teal"),
-                                 Color("Sky"),
-                                 Color("Sapphire"),
-                                 Color("Blue"),
-                                 Color("Lavender")]
+    @State private var colors = [ Color(hex: "#f7768e"),
+                                  Color(hex: "#ff9e64"),
+                                  Color(hex: "#e0af68"),
+                                  Color(hex: "#9ece6a"),
+                                  Color(hex: "#73daca"),
+                                  Color(hex: "#b4f9f8"),
+                                  Color(hex: "#2ac3de"),
+                                  Color(hex: "#7dcfff"),
+                                  Color(hex: "#7aa2f7"),
+                                  Color(hex: "#bb9af7"),
+                                  Color(hex: "#c0caf5"),
+                                  Color(hex: "#a9b1d6"),
+                                  Color(hex: "#9aa5ce")]
     
     var body: some View {
-        ZStack {
+        ZStack {    // BINARY CLOCK
             Rectangle()
                 .background(VisualEffectView())
                 .foregroundColor(Color("Background").opacity(0.8))
+                .cornerRadius(21)
             HStack {    // MAIN BINARY CLOCK VIEW
                 Spacer()
                 
@@ -132,7 +134,7 @@ struct digitCircles: View {
         self.offColor = off
         
         self.strokeOpacity = colorSelectionMode ? 0.25 : 0.2
-        self.strokeWidth = colorSelectionMode ? 3.5 : 2.5
+        self.strokeWidth = colorSelectionMode ? 4 : 2.5
     }
     
     var body: some View {
@@ -159,6 +161,17 @@ struct digitCircles: View {
                 .padding([.top], 1.3)
         }
     }
+    
+    // Adapted from https://stackoverflow.com/questions/26181221/how-to-convert-a-decimal-number-to-binary-in-swift
+    func pad(_ input: Int, row:Int) -> Bool {
+        let inputStr = String(input, radix: 2)
+        var padded = inputStr
+        for _ in 0..<(4 - inputStr.count) {
+            padded = "0" + padded
+        }
+        let output = padded[row] == "1" ? true : false
+        return output
+    }
 }
 
 // A view for a very translucent material
@@ -174,17 +187,6 @@ struct VisualEffectView: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
     }
-}
-
-// Adapted from https://stackoverflow.com/questions/26181221/how-to-convert-a-decimal-number-to-binary-in-swift
-func pad(_ input: Int, row:Int) -> Bool {
-    let inputStr = String(input, radix: 2)
-    var padded = inputStr
-    for _ in 0..<(4 - inputStr.count) {
-        padded = "0" + padded
-    }
-    let output = padded[row] == "1" ? true : false
-    return output
 }
 
 extension String {
