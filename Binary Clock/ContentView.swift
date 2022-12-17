@@ -11,6 +11,7 @@ struct BinaryClockView: View {
     
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
+    // Variables to store the time
     @State private var refreshTimer = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
     @State private var currentSecondDigit1:Int = 0
     @State private var currentSecondDigit2:Int = 0
@@ -18,10 +19,8 @@ struct BinaryClockView: View {
     @State private var currentMinuteDigit2:Int = 0
     @State private var currentHourDigit1:Int = 0
     @State private var currentHourDigit2:Int = 0
-    
-    @State private var isHovering:Bool = false
 
-    // Currently uses Tokyo Night colors!
+    // The color information (Currently uses Tokyo Night colors!)
     @AppStorage("current_color", store: .standard) private var currentColor:Int = 0
     @State private var colorSelectionMode:Bool = false
     @State private var colors = [Color("Text"),
@@ -47,14 +46,14 @@ struct BinaryClockView: View {
                 Spacer()
                 
                 ZStack {    // BINARY CLOCK
-                    Rectangle()
+                    Rectangle() // The background
                         .foregroundColor(Color("Background"))
                         .cornerRadius(21)
-                        .shadow(radius: isHovering ? 5 : 2)
-                    HStack {    // MAIN BINARY CLOCK VIEW
+                        .shadow(radius: 2)
+                    HStack {
                         Spacer()
                         
-                        VStack {
+                        VStack {    // Guides for reading the binary clock
                             Spacer()
                             Text("8")
                             Spacer()
@@ -70,7 +69,7 @@ struct BinaryClockView: View {
                         
                         Spacer()
                         
-                        HStack {
+                        HStack {    // These are the 6 rows of on/off for the binary clock
                             BinaryClockDigits(currentHourDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                             BinaryClockDigits(currentHourDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                             
@@ -88,8 +87,9 @@ struct BinaryClockView: View {
                                                             currentMinuteDigit1, currentMinuteDigit2,
                                                             currentHourDigit1, currentHourDigit2,
                                                             currentColor])
-                .animation(.easeOut(duration: 0.2), value: [colorSelectionMode, isHovering])
+                .animation(.easeOut(duration: 0.2), value: colorSelectionMode)
                 .onReceive(refreshTimer) { time in
+                    // REFRESH TIME
                     let currentTime = Date()
                     
                     let timeFormatterSecond = DateFormatter()

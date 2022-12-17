@@ -40,6 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func showWindow() {
+        // Get screen dimensions
         if let screen = NSScreen.main {
             screenWidth = Int(screen.visibleFrame.width)
             screenHeight = Int(screen.visibleFrame.height)
@@ -55,18 +56,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                   defer: true,
                                   screen: NSApp.keyWindow?.screen)
             
-            // The following is self-explanatory
-            window.collectionBehavior = .canJoinAllSpaces
-            window.isMovableByWindowBackground = false
-            window.backgroundColor = .clear
-            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1)
+            window.collectionBehavior = .canJoinAllSpaces   // Makes window appear in all spaces
+            window.isMovableByWindowBackground = false      // Makes window unmoveable by user
+            window.backgroundColor = .clear                 // Makes window transparent (window is made in SwiftUI)
+            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1) // Make window stay below all other windows
             window.setFrame(NSRect(x: 0,
                                    y: 0,
                                    width: screenWidth,
                                    height: screenHeight),
                             display: false,
-                            animate: true)
-            
+                            animate: true)  // Make the window as big as the readable part on the screen
             
             
             // Assign the SwiftUI ContentView to imageWindow
