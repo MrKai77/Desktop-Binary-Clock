@@ -59,8 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.collectionBehavior = .canJoinAllSpaces
             window.isMovableByWindowBackground = false
             window.backgroundColor = .clear
-//            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1)
-            window.level = .screenSaver
+            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1)
             window.setFrame(NSRect(x: 0,
                                    y: 0,
                                    width: screenWidth,
