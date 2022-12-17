@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct BinaryClockView: View {
     
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
@@ -41,84 +41,92 @@ struct ContentView: View {
                                  Color("Lavender")]
     
     var body: some View {
-        ZStack {    // BINARY CLOCK
-            Rectangle()
-                .background(VisualEffectView())
-                .foregroundColor(Color("Background").opacity(0.8))
-                .cornerRadius(21)
-            HStack {    // MAIN BINARY CLOCK VIEW
+        HStack {
+            Spacer()
+            VStack {
                 Spacer()
                 
-                VStack {
+                ZStack {    // BINARY CLOCK
+                    Rectangle()
+                        .foregroundColor(Color("Background"))
+                        .cornerRadius(21)
+                        .shadow(radius: isHovering ? 5 : 2)
+                    HStack {    // MAIN BINARY CLOCK VIEW
                         Spacer()
-                        Text("8")
+                        
+                        VStack {
+                            Spacer()
+                            Text("8")
+                            Spacer()
+                            Text("4")
+                            Spacer()
+                            Text("2")
+                            Spacer()
+                            Text("1")
+                            Spacer()
+                        }
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .foregroundColor(colors[currentColor].opacity(0.75))
+                        
                         Spacer()
-                        Text("4")
+                        
+                        HStack {
+                            BinaryClockDigits(currentHourDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                            BinaryClockDigits(currentHourDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                            
+                            BinaryClockDigits(currentMinuteDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                            BinaryClockDigits(currentMinuteDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                            
+                            BinaryClockDigits(currentSecondDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                            BinaryClockDigits(currentSecondDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                        }
+                        
                         Spacer()
-                        Text("2")
-                        Spacer()
-                        Text("1")
-                        Spacer()
+                    }
                 }
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .foregroundColor(colors[currentColor].opacity(0.75))
-                
-                Spacer()
-                
-                HStack {
-                    digitCircles(currentHourDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
-                    digitCircles(currentHourDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                .animation(.easeOut(duration: 0.2), value: [currentSecondDigit1, currentSecondDigit2,
+                                                            currentMinuteDigit1, currentMinuteDigit2,
+                                                            currentHourDigit1, currentHourDigit2,
+                                                            currentColor])
+                .animation(.easeOut(duration: 0.2), value: [colorSelectionMode, isHovering])
+                .onReceive(refreshTimer) { time in
+                    let currentTime = Date()
                     
-                    digitCircles(currentMinuteDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
-                    digitCircles(currentMinuteDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                    let timeFormatterSecond = DateFormatter()
+                    timeFormatterSecond.dateFormat = "ss"
+                    currentSecondDigit1 = Int(timeFormatterSecond.string(from: currentTime)[0]) ?? 0
+                    currentSecondDigit2 = Int(timeFormatterSecond.string(from: currentTime)[1]) ?? 0
                     
-                    digitCircles(currentSecondDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
-                    digitCircles(currentSecondDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
+                    let timeFormatterMinute = DateFormatter()
+                    timeFormatterMinute.dateFormat = "mm"
+                    currentMinuteDigit1 = Int(timeFormatterMinute.string(from: currentTime)[0]) ?? 0
+                    currentMinuteDigit2 = Int(timeFormatterMinute.string(from: currentTime)[1]) ?? 0
+                    
+                    let timeFormatterHour = DateFormatter()
+                    timeFormatterHour.dateFormat = "hh"
+                    currentHourDigit1 = Int(timeFormatterHour.string(from: currentTime)[0]) ?? 0
+                    currentHourDigit2 = Int(timeFormatterHour.string(from: currentTime)[1]) ?? 0
+                    
+                    // CHANGE COLOR
+                    if colorSelectionMode == true {
+                        if currentColor >= colors.count-1 {
+                            currentColor = 0
+                        } else {
+                            currentColor += 1
+                        }
+                    }
                 }
-                
-                Spacer()
-            }
-        }
-        .ignoresSafeArea()
-        .animation(.easeOut(duration: 0.2), value: [currentSecondDigit1, currentSecondDigit2,
-                                                    currentMinuteDigit1, currentMinuteDigit2,
-                                                    currentHourDigit1, currentHourDigit2,
-                                                    currentColor])
-        .animation(.easeOut(duration: 0.2), value: colorSelectionMode)
-        .onReceive(refreshTimer) { time in
-            let currentTime = Date()
-
-            let timeFormatterSecond = DateFormatter()
-            timeFormatterSecond.dateFormat = "ss"
-            currentSecondDigit1 = Int(timeFormatterSecond.string(from: currentTime)[0]) ?? 0
-            currentSecondDigit2 = Int(timeFormatterSecond.string(from: currentTime)[1]) ?? 0
-
-            let timeFormatterMinute = DateFormatter()
-            timeFormatterMinute.dateFormat = "mm"
-            currentMinuteDigit1 = Int(timeFormatterMinute.string(from: currentTime)[0]) ?? 0
-            currentMinuteDigit2 = Int(timeFormatterMinute.string(from: currentTime)[1]) ?? 0
-
-            let timeFormatterHour = DateFormatter()
-            timeFormatterHour.dateFormat = "hh"
-            currentHourDigit1 = Int(timeFormatterHour.string(from: currentTime)[0]) ?? 0
-            currentHourDigit2 = Int(timeFormatterHour.string(from: currentTime)[1]) ?? 0
-
-            // CHANGE COLOR
-            if colorSelectionMode == true {
-                if currentColor >= colors.count-1 {
-                    currentColor = 0
-                } else {
-                    currentColor += 1
+                .onTapGesture {
+                    colorSelectionMode.toggle()
                 }
+                .frame(width: appDelegate.BinaryClockWindowWidth, height: appDelegate.BinaryClockWindowHeight)
+                .padding(appDelegate.windowPadding)
             }
-        }
-        .onTapGesture {
-            colorSelectionMode.toggle()
         }
     }
 }
 
-struct digitCircles: View {
+struct BinaryClockDigits: View {
     
     private var columnDigit:Int
     
@@ -172,21 +180,6 @@ struct digitCircles: View {
         }
         let output = padded[row] == "1" ? true : false
         return output
-    }
-}
-
-// A view for a very translucent material
-struct VisualEffectView: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let effectView = NSVisualEffectView()
-        effectView.state = .active
-        effectView.material = .hudWindow
-        effectView.isEmphasized = true
-        effectView.blendingMode = .behindWindow
-        return effectView
-    }
-
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
     }
 }
 

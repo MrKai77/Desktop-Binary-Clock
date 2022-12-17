@@ -27,12 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Define the window's controller
     private var windowController: NSWindowController?
     
-    private var screenWidth:Int = 0
-    private var screenHeight:Int = 0
+    var screenWidth:Int = 0
+    var screenHeight:Int = 0
     
-    private let windowPadding:Int = 10
-    private let windowWidth:Int = 251
-    private let windowHeight:Int = 168
+    let windowPadding:CGFloat = 10
+    
+    let BinaryClockWindowWidth:CGFloat = 251
+    let BinaryClockWindowHeight:CGFloat = 168
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         showWindow()
@@ -55,21 +56,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                   screen: NSApp.keyWindow?.screen)
             
             // The following is self-explanatory
+            window.collectionBehavior = .canJoinAllSpaces
             window.isMovableByWindowBackground = false
             window.backgroundColor = .clear
-            window.hasShadow = true
-            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1)
-            window.setFrame(NSRect(x: screenWidth-windowWidth-windowPadding,
-                                   y: windowPadding,
-                                   width: windowWidth,
-                                   height: windowHeight),
+//            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1)
+            window.level = .screenSaver
+            window.setFrame(NSRect(x: 0,
+                                   y: 0,
+                                   width: screenWidth,
+                                   height: screenHeight),
                             display: false,
                             animate: true)
             
             
             
             // Assign the SwiftUI ContentView to imageWindow
-            window.contentView = NSHostingView(rootView: ContentView())
+            window.contentView = NSHostingView(rootView: BinaryClockView())
             
             // Assign imageWindow to imageWindowController (NSWindowController)
             windowController = .init(window: window)
@@ -85,5 +87,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         windowController.close()       // Close window
         self.windowController = nil    // Release window controller (will need to be re-made to show window again)
     }
-    
 }
