@@ -76,6 +76,7 @@ struct MenubarView: View {
             
             HStack(spacing: 5) {
                 Button(action: {        // SHOW APPLE MENU
+                    appDelegate.checkAccessibilityAccess()
                     AS_showAppleMenu.executeAsync()
                 }, label: {
                     Label(whoami, systemImage: "apple.logo")
@@ -83,7 +84,6 @@ struct MenubarView: View {
                         .background(Color("Lavender"))
                         .cornerRadius(5)
                 })
-                .buttonStyle(.plain)
                 
                 Button(action: {    // SHOW MENUBAR
                     isMenubarShown = false
@@ -93,17 +93,44 @@ struct MenubarView: View {
                         .background(Color("Flamingo"))
                         .cornerRadius(5)
                 })
-                .buttonStyle(.plain)
                 
-                Button(action: {
-                    _ = shell("open -a Arc")
-                }, label: {
-                    Label("Arc", systemImage: "globe")
-                        .padding(5)
-                        .background(Color("Peach"))
-                        .cornerRadius(5)
-                })
-                .buttonStyle(.plain)
+                Group { // APP SHORTCUTS
+                    Button(action: {
+                        _ = shell("open -a Obsidian")
+                    }, label: {
+                        Label("Obsidian", systemImage: "list.clipboard.fill")
+                            .padding(5)
+                            .background(Color("Blue"))
+                            .cornerRadius(5)
+                    })
+                    
+                    Button(action: {
+                        _ = shell("open -a Arc")
+                    }, label: {
+                        Label("Arc", systemImage: "safari.fill")
+                            .padding(5)
+                            .background(Color("Sky"))
+                            .cornerRadius(5)
+                    })
+                    
+                    Button(action: {
+                        _ = shell("open -a iTerm")
+                    }, label: {
+                        Label("iTerm", systemImage: "terminal.fill")
+                            .padding(5)
+                            .background(Color("Peach"))
+                            .cornerRadius(5)
+                    })
+                    
+                    Button(action: {
+                        _ = shell("open -a Visual\\ Studio\\ Code")
+                    }, label: {
+                        Label("VSCode", systemImage: "doc.text.fill")
+                            .padding(5)
+                            .background(Color("Rosewater"))
+                            .cornerRadius(5)
+                    })
+                }
                 
                 Spacer()
                 
@@ -116,7 +143,6 @@ struct MenubarView: View {
                             .background(Color("Mauve"))
                             .cornerRadius(5)
                     })
-                    .buttonStyle(.plain)
                 }
                 
                 if currentMusic != "" {
@@ -128,7 +154,6 @@ struct MenubarView: View {
                             .background(Color("Red"))
                             .cornerRadius(5)
                     })
-                    .buttonStyle(.plain)
                 }
                 
                 Button(action: {        // OPEN CONTROL CENTER
@@ -139,7 +164,6 @@ struct MenubarView: View {
                         .background(Color("Yellow"))
                         .cornerRadius(5)
                 })
-                .buttonStyle(.plain)
                 
                 Button(action: {        // OPEN NOTIFICATION CENTER
                     AS_openNotificationCenter.executeAsync()
@@ -149,11 +173,11 @@ struct MenubarView: View {
                         .background(Color("Sapphire"))
                         .cornerRadius(5)
                 })
-                .buttonStyle(.plain)
             }
             .padding(5)
+            .buttonStyle(.plain)
             .foregroundColor(Color("Background"))
-            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+            .font(.system(size: 12, weight: .medium, design: .monospaced))
         }
         .offset(y: isMenubarShown ? 0 : CGFloat(-appDelegate.menubarHeight))
         .animation(.easeIn, value: isMenubarShown)

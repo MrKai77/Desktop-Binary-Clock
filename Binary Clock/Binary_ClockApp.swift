@@ -74,15 +74,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 backing: .buffered,
                                 defer: true,
                                 screen: NSApp.keyWindow?.screen)
+            
+            // Disable shadow
             panel.hasShadow = false
+            
+            // Panel is already a nonactivatingPanel, but add this just in case
             panel.becomesKeyOnlyIfNeeded = true
+            
+            // Show panel on ALL spaces
             panel.collectionBehavior = .canJoinAllSpaces
-            panel.level = .screenSaver
+            
+            // Using this instead of screensaver level makes it blurred like other UI elements in Launchpad
+            panel.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.statusWindow)))
+            
+            // Clear background
             panel.backgroundColor = .clear
+            
+            // Assign SwiftUI view to panel
             panel.contentView = NSHostingView(rootView: MenubarView())
+            
+            // Show window
             panel.orderFrontRegardless()
 
+            // Assign panel to NSWindowController
             menubarWindowController = .init(window: panel)
+            
+            // Position window
             positionMenubarWindow()
         }
     }
