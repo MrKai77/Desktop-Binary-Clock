@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  BinaryClockView.swift
 //  Binary Clock
 //
 //  Created by Kai Azim on 2022-12-13.
@@ -43,6 +43,7 @@ struct BinaryClockView: View {
         HStack {
             Spacer()
             VStack {
+                
                 Spacer()
                 
                 ZStack {    // BINARY CLOCK
@@ -65,7 +66,7 @@ struct BinaryClockView: View {
                             Spacer()
                         }
                         .font(.system(size: 12, weight: .bold, design: .monospaced))
-                        .foregroundColor(colors[currentColor].opacity(0.75))
+                        .foregroundColor(colors[currentColor].opacity(0.8))
                         
                         Spacer()
                         
@@ -136,37 +137,47 @@ struct BinaryClockDigits: View {
     private var strokeOpacity:Double = 0.2
     private var strokeWidth:Double = 2.5
     
+    private var pad0:Bool = false
+    private var pad1:Bool = false
+    private var pad2:Bool = false
+    private var pad3:Bool = false
+    
     init(_ digit:Int, on:Color, off:Color, colorSelectionMode:Bool) {
         self.columnDigit = digit
         
         self.onColor = on
         self.offColor = off
         
-        self.strokeOpacity = colorSelectionMode ? 0.25 : 0.2
+        self.strokeOpacity = colorSelectionMode ? 0.3 : 0.2
         self.strokeWidth = colorSelectionMode ? 4 : 3
+        
+        self.pad0 = pad(columnDigit, row: 0)
+        self.pad1 = pad(columnDigit, row: 1)
+        self.pad2 = pad(columnDigit, row: 2)
+        self.pad3 = pad(columnDigit, row: 3)
     }
     
     var body: some View {
         VStack {
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
+                .strokeBorder(onColor.opacity(pad0 ? 0 : strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
-                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 0) ? onColor : offColor))
+                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad0 ? onColor : offColor))
                 .padding([.bottom], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
+                .strokeBorder(onColor.opacity(pad1 ? 0 : strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
-                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 1) ? onColor : offColor))
+                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad1 ? onColor : offColor))
                 .padding([.bottom, .top], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
+                .strokeBorder(onColor.opacity(pad2 ? 0 : strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
-                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 2) ? onColor : offColor))
+                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad2 ? onColor : offColor))
                 .padding([.bottom, .top], 1.3)
             RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(onColor.opacity(strokeOpacity), lineWidth: strokeWidth)
+                .strokeBorder(onColor.opacity(pad3 ? 0 : strokeOpacity), lineWidth: strokeWidth)
                 .frame(width: 27.5, height: 27.5)
-                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad(columnDigit, row: 3) ? onColor : offColor))
+                .background(RoundedRectangle(cornerRadius: 8).foregroundColor(pad3 ? onColor : offColor))
                 .padding([.top], 1.3)
         }
     }

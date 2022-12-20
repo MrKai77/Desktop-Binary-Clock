@@ -7,16 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A802A50E29515197000A28D4 /* AppleScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A802A50D29515197000A28D4 /* AppleScriptRunner.swift */; };
+		A8BDE4C329500DB700E66785 /* MenubarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BDE4C229500DB700E66785 /* MenubarView.swift */; };
 		A8FF18D12948BFD80054FE61 /* Binary_ClockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FF18D02948BFD80054FE61 /* Binary_ClockApp.swift */; };
-		A8FF18D32948BFD80054FE61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FF18D22948BFD80054FE61 /* ContentView.swift */; };
+		A8FF18D32948BFD80054FE61 /* BinaryClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FF18D22948BFD80054FE61 /* BinaryClockView.swift */; };
 		A8FF18D52948BFD90054FE61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8FF18D42948BFD90054FE61 /* Assets.xcassets */; };
 		A8FF18D82948BFD90054FE61 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8FF18D72948BFD90054FE61 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A802A50D29515197000A28D4 /* AppleScriptRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScriptRunner.swift; sourceTree = "<group>"; };
+		A8BDE4C229500DB700E66785 /* MenubarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarView.swift; sourceTree = "<group>"; };
 		A8FF18CD2948BFD80054FE61 /* Binary Clock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Binary Clock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8FF18D02948BFD80054FE61 /* Binary_ClockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary_ClockApp.swift; sourceTree = "<group>"; };
-		A8FF18D22948BFD80054FE61 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A8FF18D22948BFD80054FE61 /* BinaryClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryClockView.swift; sourceTree = "<group>"; };
 		A8FF18D42948BFD90054FE61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8FF18D72948BFD90054FE61 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A8FF18D92948BFD90054FE61 /* Binary_Clock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Binary_Clock.entitlements; sourceTree = "<group>"; };
@@ -53,7 +57,9 @@
 			isa = PBXGroup;
 			children = (
 				A8FF18D02948BFD80054FE61 /* Binary_ClockApp.swift */,
-				A8FF18D22948BFD80054FE61 /* ContentView.swift */,
+				A8FF18D22948BFD80054FE61 /* BinaryClockView.swift */,
+				A8BDE4C229500DB700E66785 /* MenubarView.swift */,
+				A802A50D29515197000A28D4 /* AppleScriptRunner.swift */,
 				A8FF18D42948BFD90054FE61 /* Assets.xcassets */,
 				A8FF18D92948BFD90054FE61 /* Binary_Clock.entitlements */,
 				A8FF18D62948BFD90054FE61 /* Preview Content */,
@@ -97,7 +103,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					A8FF18CC2948BFD80054FE61 = {
 						CreatedOnToolsVersion = 14.1;
@@ -139,8 +145,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8FF18D32948BFD80054FE61 /* ContentView.swift in Sources */,
+				A8FF18D32948BFD80054FE61 /* BinaryClockView.swift in Sources */,
 				A8FF18D12948BFD80054FE61 /* Binary_ClockApp.swift in Sources */,
+				A8BDE4C329500DB700E66785 /* MenubarView.swift in Sources */,
+				A802A50E29515197000A28D4 /* AppleScriptRunner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +188,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -240,6 +249,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -266,13 +276,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Binary Clock/Binary_Clock.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Binary Clock/Preview Content\"";
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Detect unread mail, and calendar events!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -292,13 +306,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Binary Clock/Binary_Clock.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Binary Clock/Preview Content\"";
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Detect unread mail, and calendar events!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
