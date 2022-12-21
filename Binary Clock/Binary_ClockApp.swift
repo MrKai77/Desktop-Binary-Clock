@@ -176,3 +176,63 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 }
+
+class timeVariables: ObservableObject {
+    @Published var currentTime = Date()
+    @Published var currentTimeFormatted = "00:00"
+    @Published var currentTimeSecond = "00"
+    @Published var currentTimeMinute = "00"
+    @Published var currentTimeHour = "00"
+    
+    func refreshTime() {
+        currentTime = Date()
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm"
+        self.currentTimeFormatted = timeFormatter.string(from: currentTime)
+        
+        let timeFormatterSecond = DateFormatter()
+        timeFormatterSecond.dateFormat = "ss"
+        self.currentTimeSecond = timeFormatterSecond.string(from: currentTime)
+        
+        let timeFormatterMinute = DateFormatter()
+        timeFormatterMinute.dateFormat = "mm"
+        self.currentTimeMinute = timeFormatterMinute.string(from: currentTime)
+        
+        let timeFormatterHour = DateFormatter()
+        timeFormatterHour.dateFormat = "hh"
+        self.currentTimeHour = timeFormatterHour.string(from: currentTime)
+    }
+}
+
+class colorVariables: ObservableObject {
+    @AppStorage("current_color", store: .standard) var currentColor:Int = 0
+    @Published var colorSelectionMode:Bool = false
+    @Published var backgroundColor = Color("Background")
+    @Published var colors = [Color("Text"),
+                             Color("Rosewater"),
+                             Color("Flamingo"),
+                             Color("Pink"),
+                             Color("Mauve"),
+                             Color("Red"),
+                             Color("Maroon"),
+                             Color("Peach"),
+                             Color("Yellow"),
+                             Color("Green"),
+                             Color("Teal"),
+                             Color("Sky"),
+                             Color("Sapphire"),
+                             Color("Blue"),
+                             Color("Lavender")]
+    
+    func selectNextColor() {
+        if self.currentColor >= self.colors.count-1 {
+            self.currentColor = 0
+        } else {
+            self.currentColor += 1
+        }
+    }
+    func toggleColorSelectionMode() {
+        self.colorSelectionMode.toggle()
+    }
+}

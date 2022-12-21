@@ -181,7 +181,7 @@ struct MenubarView: View {
         }
         .offset(y: isMenubarShown ? 0 : CGFloat(-appDelegate.menubarHeight))
         .animation(.easeIn, value: isMenubarShown)
-        .animation(.easeOut, value: [currentMusic, currentUnreadMail])
+        .animation(.easeOut, value: [currentMusic, currentUnreadMail, currentDate, currentTime])
         .onReceive(refreshCommandsFrequent) { time in
             frequentCommandRefresh()
         }
