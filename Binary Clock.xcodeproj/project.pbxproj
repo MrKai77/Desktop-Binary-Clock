@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A8987602297623C600CFA41D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A8987601297623C600CFA41D /* README.md */; };
 		A8FF18D12948BFD80054FE61 /* Binary_ClockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FF18D02948BFD80054FE61 /* Binary_ClockApp.swift */; };
 		A8FF18D32948BFD80054FE61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FF18D22948BFD80054FE61 /* ContentView.swift */; };
 		A8FF18D52948BFD90054FE61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8FF18D42948BFD90054FE61 /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A8987601297623C600CFA41D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A8FF18CD2948BFD80054FE61 /* Binary Clock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Binary Clock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8FF18D02948BFD80054FE61 /* Binary_ClockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary_ClockApp.swift; sourceTree = "<group>"; };
 		A8FF18D22948BFD80054FE61 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -36,6 +38,7 @@
 		A8FF18C42948BFD80054FE61 = {
 			isa = PBXGroup;
 			children = (
+				A8987601297623C600CFA41D /* README.md */,
 				A8FF18CF2948BFD80054FE61 /* Binary Clock */,
 				A8FF18CE2948BFD80054FE61 /* Products */,
 			);
@@ -127,6 +130,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8987602297623C600CFA41D /* README.md in Resources */,
 				A8FF18D82948BFD90054FE61 /* Preview Assets.xcassets in Resources */,
 				A8FF18D52948BFD90054FE61 /* Assets.xcassets in Resources */,
 			);
