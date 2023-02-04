@@ -49,9 +49,8 @@ struct BinaryClockView: View {
                 
                 ZStack {    // BINARY CLOCK
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                        .foregroundColor(Color("Background"))
                         .cornerRadius(21)
-                        .shadow(radius: 2)
+                        .shadow(radius: 10)
                     HStack {
                         
                         VStack {    // Guides for reading the binary clock
@@ -183,31 +182,5 @@ struct BinaryClockDigits: View {
         }
         let output = padded[row] == "1" ? true : false
         return output
-    }
-}
-
-extension String {
-    subscript(idx: Int) -> String {
-        String(self[index(startIndex, offsetBy: idx)])
-    }
-}
-
-// SwiftUI view for NSVisualEffect
-struct VisualEffectView: NSViewRepresentable {
-    let material: NSVisualEffectView.Material
-    let blendingMode: NSVisualEffectView.BlendingMode
-    
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let visualEffectView = NSVisualEffectView()
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
-        visualEffectView.state = NSVisualEffectView.State.active
-        visualEffectView.isEmphasized = true
-        return visualEffectView
-    }
-
-    func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
     }
 }
