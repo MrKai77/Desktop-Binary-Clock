@@ -11,6 +11,8 @@ struct BinaryClockView: View {
     
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
+    @State var shouldShowClock = true
+    
     // Variables to store the time
     @State private var refreshTimer = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
     @State private var currentSecondDigit1:Int = 0
@@ -46,12 +48,11 @@ struct BinaryClockView: View {
                 Spacer()
                 
                 ZStack {    // BINARY CLOCK
-                    Rectangle() // The background
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                         .foregroundColor(Color("Background"))
                         .cornerRadius(21)
                         .shadow(radius: 2)
                     HStack {
-                        Spacer()
                         
                         VStack {    // Guides for reading the binary clock
                             Spacer()
@@ -67,7 +68,6 @@ struct BinaryClockView: View {
                         .font(.system(size: 12, weight: .bold, design: .monospaced))
                         .foregroundColor(colors[currentColor].opacity(0.75))
                         
-                        Spacer()
                         
                         HStack {    // These are the 6 rows of on/off for the binary clock
                             BinaryClockDigits(currentHourDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
@@ -79,15 +79,8 @@ struct BinaryClockView: View {
                             BinaryClockDigits(currentSecondDigit1, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                             BinaryClockDigits(currentSecondDigit2, on: colors[currentColor].opacity(0.8), off: .clear, colorSelectionMode: colorSelectionMode)
                         }
-                        
-                        Spacer()
                     }
                 }
-                .animation(.easeOut(duration: 0.2), value: [currentSecondDigit1, currentSecondDigit2,
-                                                            currentMinuteDigit1, currentMinuteDigit2,
-                                                            currentHourDigit1, currentHourDigit2,
-                                                            currentColor])
-                .animation(.easeOut(duration: 0.2), value: colorSelectionMode)
                 .onReceive(refreshTimer) { time in
                     // REFRESH TIME
                     let currentTime = Date()
@@ -116,11 +109,21 @@ struct BinaryClockView: View {
                         }
                     }
                 }
+                .onReceive(.toggleVisibility) { _ in
+                    self.shouldShowClock.toggle()
+                }
+                .offset(y: self.shouldShowClock ? 0 : appDelegate.BinaryClockWindowHeight + appDelegate.windowPadding)
                 .onTapGesture {
                     colorSelectionMode.toggle()
                 }
                 .frame(width: appDelegate.BinaryClockWindowWidth, height: appDelegate.BinaryClockWindowHeight)
                 .padding(appDelegate.windowPadding)
+                
+                .animation(.easeOut(duration: 0.2), value: [currentSecondDigit1, currentSecondDigit2,
+                                                            currentMinuteDigit1, currentMinuteDigit2,
+                                                            currentHourDigit1, currentHourDigit2,
+                                                            currentColor])
+                .animation(.interpolatingSpring(stiffness: 150, damping: 15), value: [colorSelectionMode, shouldShowClock])
             }
         }
     }
@@ -186,5 +189,25 @@ struct BinaryClockDigits: View {
 extension String {
     subscript(idx: Int) -> String {
         String(self[index(startIndex, offsetBy: idx)])
+    }
+}
+
+// SwiftUI view for NSVisualEffect
+struct VisualEffectView: NSViewRepresentable {
+    let material: NSVisualEffectView.Material
+    let blendingMode: NSVisualEffectView.BlendingMode
+    
+    func makeNSView(context: Context) -> NSVisualEffectView {
+        let visualEffectView = NSVisualEffectView()
+        visualEffectView.material = material
+        visualEffectView.blendingMode = blendingMode
+        visualEffectView.state = NSVisualEffectView.State.active
+        visualEffectView.isEmphasized = true
+        return visualEffectView
+    }
+
+    func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
+        visualEffectView.material = material
+        visualEffectView.blendingMode = blendingMode
     }
 }

@@ -15,6 +15,9 @@ struct Binary_ClockApp: App {
     var body: some Scene {
         MenuBarExtra("Binary Clock", systemImage: "clock.circle.fill") {
             Text("Binary Clock")
+            Button("Toggle Visibility") {
+                NotificationCenter.default.post(name: Notification.Name.toggleVisibility, object: nil)
+            }
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
@@ -27,12 +30,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Define the window's controller
     private var windowController: NSWindowController?
     
-    var screenWidth:Int = 0
-    var screenHeight:Int = 0
+    var isShown = true
     
     let windowPadding:CGFloat = 10
-    
-    let BinaryClockWindowWidth:CGFloat = 251
+    let BinaryClockWindowWidth:CGFloat = 247
     let BinaryClockWindowHeight:CGFloat = 168
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -41,14 +42,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func showWindow() {
         // Get screen dimensions
-        if let screen = NSScreen.main {
-            screenWidth = Int(screen.visibleFrame.width)
-            screenHeight = Int(screen.visibleFrame.height)
-        }
+        guard let screen = NSScreen.main else { return }
+        let screenWidth = Int(screen.visibleFrame.width)
+        let screenHeight = Int(screen.visibleFrame.height)
         
-        if let windowController = windowController {
-            windowController.window?.orderFrontRegardless()    // If window is already shown, focus it
-        } else {
+        if windowController != nil { return } else {
             // Define the window
             let window = NSWindow(contentRect: .zero,
                                   styleMask: .borderless,
@@ -59,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.collectionBehavior = .canJoinAllSpaces   // Makes window appear in all spaces
             window.isMovableByWindowBackground = false      // Makes window unmoveable by user
             window.backgroundColor = .clear                 // Makes window transparent (window is made in SwiftUI)
-            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue - 1) // Make window stay below all other windows
+            window.level = .statusBar // Make window stay below all other windows
             window.setFrame(NSRect(x: 0,
                                    y: 0,
                                    width: screenWidth,
@@ -75,7 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             windowController = .init(window: window)
             
             // Show window
-            window.orderFrontRegardless()
+            window.makeKeyAndOrderInFrontOfSpaces()
         }
     }
     
@@ -84,5 +82,51 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         windowController.close()       // Close window
         self.windowController = nil    // Release window controller (will need to be re-made to show window again)
+    }
+}
+
+// Define some types for the next function (which uses Apple's private APIs)
+private typealias CGSConnectionID = UInt
+private typealias CGSSpaceID = UInt64
+@_silgen_name("CGSCopySpaces")
+private func CGSCopySpaces(_: Int, _: Int) -> CFArray
+@_silgen_name("CGSAddWindowsToSpaces")
+private func CGSAddWindowsToSpaces(_ cid: CGSConnectionID, _ windows: NSArray, _ spaces: NSArray)
+
+// This extension allows the window to be put on "top" of spaces, making it slide with you when you change spaces!
+extension NSWindow {
+    func makeKeyAndOrderInFrontOfSpaces() {
+        self.orderFrontRegardless()
+        let contextID = NSApp.value(forKey: "contextID") as! Int
+        let spaces: CFArray
+        if #available(macOS 12.2, *) {
+            spaces = CGSCopySpaces(contextID, 11)
+        } else {
+            spaces = CGSCopySpaces(contextID, 13)
+        }
+        // macOS 12.1 -> 13
+        // macOS 12.2 beta 2 -> 9 or 11
+        
+        let windows = [NSNumber(value: windowNumber)]
+        
+        CGSAddWindowsToSpaces(CGSConnectionID(contextID), windows as CFArray, spaces)
+    }
+}
+
+extension Notification.Name {
+    static let toggleVisibility = Notification.Name("toggleVisibility")
+}
+
+extension View {
+    func onReceive(
+        _ name: Notification.Name,
+        center: NotificationCenter = .default,
+        object: AnyObject? = nil,
+        perform action: @escaping (Notification) -> Void
+    ) -> some View {
+        onReceive(
+            center.publisher(for: name, object: object),
+            perform: action
+        )
     }
 }
